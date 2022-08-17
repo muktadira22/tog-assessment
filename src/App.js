@@ -1,12 +1,13 @@
 import React from "react";
 import "./custom.scss";
-import { Button } from "react-bootstrap";
-
+import MasterFeeType from "./pages/MasterFeeType";
+import { Switch, Route } from "react-router-dom";
 function App() {
   return (
-    <div className="App">
-      <Button variant="success">Test</Button>
-    </div>
+    <Switch>
+      <Route path={"/"} component={MasterFeeType} />
+      <Route path={"/create"} component={MasterFeeType} exact />
+    </Switch>
   );
 }
 
