@@ -4,5 +4,22 @@ $theme-colors: (
   "success": #027f71
 );
 
+.cursor-pointer:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.w-auto {
+  width: auto;
+}
+
+.btn-icon {
+  cursor: pointer;
+}
+
+.btn-icon:hover {
+  opacity: 0.5;
+}
+
 // Import Bootstrap and its default variables
 @import "~bootstrap/scss/bootstrap.scss";
