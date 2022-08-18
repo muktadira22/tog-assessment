@@ -13,75 +13,108 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import PrintIcon from "@mui/icons-material/Print";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
-const headerTable = [
-  {
-    label: "Fee Type Code",
-    field: "code"
-  },
-  {
-    label: "Name",
-    field: "name"
-  },
-  {
-    label: "Description",
-    field: "description"
-  },
-  {
-    label: "Status",
-    field: "status",
-    render: ({ data, row, object }) => {
-      if (data) {
-        return "Active";
-      } else {
-        return "Inactive";
-      }
-    }
-  },
-  {
-    label: "Action",
-    field: "id",
-    render: ({ data, row, object }) => {
-      return (
-        <span>
-          <span className="btn-icon">
-            <EditIcon />
-          </span>
-          <span className="btn-icon">
-            <VisibilityIcon />
-          </span>
-          <span className="btn-icon">
-            <DeleteIcon />
-          </span>
-        </span>
-      );
-    }
-  }
-];
+import { useHistory } from "react-router-dom";
 
 const MasterFeeType = () => {
+  const history = useHistory();
   const [isAdvanceSearch, setIsAdvanceSearch] = useState(false);
+  const [search, setSearch] = useState("");
   const [data, setData] = useState([]);
   const breadcrumb = [
     { link: "/master-type", title: "Master Data Management" },
     { link: "/master-type", title: "Fee Type" }
   ];
 
-  useEffect(() => {
-    //Get all users details in bootstrap table
+  const initData = () => {
     axios
       .get("https://62fcf7f26e617f88dea23afe.mockapi.io/api/fee-type")
       .then((res) => {
         //Storing users detail in state array object
         setData(res.data);
       });
+  };
+
+  useEffect(() => {
+    initData();
   }, []);
+
+  const headerTable = [
+    {
+      label: "Fee Type Code",
+      field: "code"
+    },
+    {
+      label: "Name",
+      field: "name"
+    },
+    {
+      label: "Description",
+      field: "description"
+    },
+    {
+      label: "Status",
+      field: "status",
+      render: ({ data, row, object }) => {
+        if (data) {
+          return "Active";
+        } else {
+          return "Inactive";
+        }
+      }
+    },
+    {
+      label: "Action",
+      field: "id",
+      render: ({ data, row, object }) => {
+        return (
+          <span>
+            <span
+              className="btn-icon"
+              onClick={() => {
+                history.push(`/${data}/edit`);
+              }}
+            >
+              <EditIcon />
+            </span>
+            <span
+              className="btn-icon"
+              onClick={() => {
+                history.push(`/${data}/detail`);
+              }}
+            >
+              <VisibilityIcon />
+            </span>
+            <span className="btn-icon" onClick={() => deleteData(data)}>
+              <DeleteIcon />
+            </span>
+          </span>
+        );
+      }
+    }
+  ];
+
+  const deleteData = (id) => {
+    axios
+      .delete(`https://62fcf7f26e617f88dea23afe.mockapi.io/api/fee-type/${id}`)
+      .then((res) => {
+        initData();
+      });
+  };
   return (
     <Layout breadcrumb={breadcrumb} title="Fee Type">
       <Row className="mb-2">
         <Col>
           <Row>
             <Col xs={3}>
-              <Form.Control placeholder="Search" size="sm" maxLength={256} />
+              <Form.Control
+                placeholder="Search"
+                size="sm"
+                maxLength={256}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                }}
+                value={search}
+              />
             </Col>
             <Col>
               <span
@@ -105,7 +138,11 @@ const MasterFeeType = () => {
           <Button size="sm" variant="secondary">
             <PrintIcon />
           </Button>{" "}
-          <Button size="sm" variant="primary">
+          <Button
+            size="sm"
+            variant="primary"
+            onClick={() => history.push("/add")}
+          >
             <NoteAddIcon /> Create New
           </Button>{" "}
         </Col>

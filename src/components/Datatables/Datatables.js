@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 //jQuery libraries
 import "jquery/dist/jquery.min.js";
@@ -9,19 +9,21 @@ import "datatables.net-bs4/css/dataTables.bootstrap4.css";
 
 import $ from "jquery";
 
-// INITIALIZE DATATABLE
-$(document).ready(function () {
-  setTimeout(function () {
-    $("#datatable-component").DataTable({
-      searching: false
-    });
-  }, 1000);
-});
-
 const Datatables = ({ data, header }) => {
+  useEffect(() => {
+    // INITIALIZE DATATABLE
+    $(document).ready(function () {
+      setTimeout(function () {
+        $(`#datatable-component`).DataTable();
+        $(".dataTables_filter").css("opacity", 0);
+        $(".dataTables_filter input").attr("readonly", true);
+      }, 1000);
+    });
+  }, []);
+
   return (
     <table
-      id="datatable-component"
+      id={`datatable-component`}
       className="table table-hover table-bordered"
     >
       <thead>
